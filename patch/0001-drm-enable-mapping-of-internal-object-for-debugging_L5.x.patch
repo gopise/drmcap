@@ -1,0 +1,36 @@
+From cf6c7d289b053c89ad27a67a88351a063c0c82ae Mon Sep 17 00:00:00 2001
+From: Taichun Yuan <taichun.yuan@nxp.com>
+Date: Wed, 17 Aug 2022 11:31:01 +0800
+Subject: [PATCH] drm: enable mapping of internal object for debugging
+
+This is for debug tool which would like to map imported internal object
+, such as BO, to userspace. Buffer capture tool is an example.
+For debug only
+---
+ drivers/gpu/drm/drm_gem.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+index 09c820045..f934c40a9 100644
+--- a/drivers/gpu/drm/drm_gem.c
++++ b/drivers/gpu/drm/drm_gem.c
+@@ -317,11 +317,15 @@ int drm_gem_dumb_map_offset(struct drm_file *file, struct drm_device *dev,
+ 	if (!obj)
+ 		return -ENOENT;
+ 
+-	/* Don't allow imported objects to be mapped */
++    /*
++     * Enable mapping for imported objects, for debug only
++     */
++    /*
+ 	if (obj->import_attach) {
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
++    */
+ 
+ 	ret = drm_gem_create_mmap_offset(obj);
+ 	if (ret)
+-- 
+2.17.1
+
